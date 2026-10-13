@@ -1,0 +1,14 @@
+{
+    "requires": {
+        "cockpit": "175"
+    },
+    "tools": {
+        "index": {
+            "label": "NetDebug",
+            "order": 140,
+            "keywords": [
+                { "matches": ["netdebug", "ping", "traceroute", "iperf", "iperf3", "network", "latency", "bandwidth", "throughput", "mtu"] }
+            ]
+        }
+    }
+}

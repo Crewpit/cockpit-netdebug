@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title translate="yes">NetDebug</title>
+    <meta charset="utf-8" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="theme.js"></script>
+
+    <link href="vendor/patternfly/patternfly.min.css" type="text/css" rel="stylesheet" />
+    <link href="cockpit-glue.css" type="text/css" rel="stylesheet" />
+    <link href="index.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body class="pf-v6-m-tabular-nums">
+    <div class="ct-page-fill" id="app">
+        <div class="pf-v6-c-page no-masthead-sidebar">
+            <div class="pf-v6-c-page__main-container">
+                <nav id="app-menu" class="app-menubar"></nav>
+
+                <main class="pf-v6-c-page__main" tabindex="-1">
+
+                    <section class="pf-v6-c-page__main-section">
+                        <div class="pf-v6-c-card">
+                            <div class="pf-v6-c-card__header">
+                                <div class="pf-v6-c-card__header-main">
+                                    <div class="pf-v6-c-card__title">
+                                        <h1 class="pf-v6-c-card__title-text pf-v6-c-title pf-m-2xl" translate="yes">NetDebug</h1>
+                                    </div>
+                                    <p class="app-muted" translate="yes">Ping, traceroute, port checks, iperf3 and DNS lookups from the SERVER, with live output.</p>
+                                </div>
+                            </div>
+                            <hr class="pf-v6-c-divider" />
+                            <div class="pf-v6-c-card__body">
+
+                    <div id="pane-ping" class="app-pane" hidden>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Ping</h2>
+                            </div>
+                            <p class="app-muted pf-v6-u-mb-md" translate="yes">Send ICMP echo requests from the SERVER and watch the replies arrive. Tick Infinite Test to keep going until you press Stop.</p>
+                            <form id="nd-ping-form" class="nd-form" novalidate>
+                                <fieldset id="nd-ping-fields" class="nd-fields"></fieldset>
+                                <div class="nd-cmdrow">
+                                    <label class="app-muted" for="nd-ping-cmd" translate="yes">Command</label>
+                                    <span class="pf-v6-c-form-control pf-m-readonly nd-cmdrow__field"><input type="text" id="nd-ping-cmd" class="app-mono" readonly spellcheck="false" /></span>
+                                    <button id="nd-ping-cmd-copy" class="pf-v6-c-button pf-m-secondary" type="button" translate="yes">Copy Command</button>
+                                </div>
+                                <div id="nd-ping-actions" class="nd-actions"></div>
+                            </form>
+                            <div id="nd-ping-alert"></div>
+                        </div>
+                        <div id="nd-ping-summary" class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Live Statistics</h2>
+                            </div>
+                            <div id="nd-ping-stats" class="nd-stats"></div>
+                        </div>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Output</h2>
+                                <span id="nd-ping-status"></span>
+                            </div>
+                            <div class="pf-v6-c-code-block nd-output">
+                                <div class="pf-v6-c-code-block__header">
+                                    <div class="pf-v6-c-code-block__actions">
+                                        <button id="nd-ping-copy" class="pf-v6-c-button pf-m-secondary pf-m-small" type="button" translate="yes">Copy Output</button>
+                                    </div>
+                                </div>
+                                <div class="pf-v6-c-code-block__content nd-output__scroll" id="nd-ping-scroll" tabindex="0" role="log" aria-label="Ping Output">
+                                    <pre class="pf-v6-c-code-block__pre"><code class="pf-v6-c-code-block__code" id="nd-ping-out"></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pane-traceroute" class="app-pane" hidden>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Traceroute</h2>
+                            </div>
+                            <p class="app-muted pf-v6-u-mb-md" translate="yes">Show the path packets take from the SERVER to a host, hop by hop. ICMP and TCP methods need administrative access (use the Limited Access button in the header).</p>
+                            <form id="nd-traceroute-form" class="nd-form" novalidate>
+                                <fieldset id="nd-traceroute-fields" class="nd-fields"></fieldset>
+                                <div class="nd-cmdrow">
+                                    <label class="app-muted" for="nd-traceroute-cmd" translate="yes">Command</label>
+                                    <span class="pf-v6-c-form-control pf-m-readonly nd-cmdrow__field"><input type="text" id="nd-traceroute-cmd" class="app-mono" readonly spellcheck="false" /></span>
+                                    <button id="nd-traceroute-cmd-copy" class="pf-v6-c-button pf-m-secondary" type="button" translate="yes">Copy Command</button>
+                                </div>
+                                <div id="nd-traceroute-actions" class="nd-actions"></div>
+                            </form>
+                            <div id="nd-traceroute-alert"></div>
+                        </div>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Output</h2>
+                                <span id="nd-traceroute-status"></span>
+                            </div>
+                            <div class="pf-v6-c-code-block nd-output">
+                                <div class="pf-v6-c-code-block__header">
+                                    <div class="pf-v6-c-code-block__actions">
+                                        <button id="nd-traceroute-copy" class="pf-v6-c-button pf-m-secondary pf-m-small" type="button" translate="yes">Copy Output</button>
+                                    </div>
+                                </div>
+                                <div class="pf-v6-c-code-block__content nd-output__scroll" id="nd-traceroute-scroll" tabindex="0" role="log" aria-label="Traceroute Output">
+                                    <pre class="pf-v6-c-code-block__pre"><code class="pf-v6-c-code-block__code" id="nd-traceroute-out"></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pane-iperf3" class="app-pane" hidden>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">iPerf3 Client</h2>
+                            </div>
+                            <p class="app-muted pf-v6-u-mb-md" translate="yes">Measure throughput from the SERVER to an iperf3 server. The other end must be running <code>iperf3 -s</code> and be reachable on the chosen port.</p>
+                            <form id="nd-iperf3-form" class="nd-form" novalidate>
+                                <fieldset id="nd-iperf3-fields" class="nd-fields"></fieldset>
+                                <div class="nd-cmdrow">
+                                    <label class="app-muted" for="nd-iperf3-cmd" translate="yes">Command</label>
+                                    <span class="pf-v6-c-form-control pf-m-readonly nd-cmdrow__field"><input type="text" id="nd-iperf3-cmd" class="app-mono" readonly spellcheck="false" /></span>
+                                    <button id="nd-iperf3-cmd-copy" class="pf-v6-c-button pf-m-secondary" type="button" translate="yes">Copy Command</button>
+                                </div>
+                                <div id="nd-iperf3-actions" class="nd-actions"></div>
+                            </form>
+                            <div id="nd-iperf3-alert"></div>
+                        </div>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Output</h2>
+                                <span id="nd-iperf3-status"></span>
+                            </div>
+                            <div class="pf-v6-c-code-block nd-output">
+                                <div class="pf-v6-c-code-block__header">
+                                    <div class="pf-v6-c-code-block__actions">
+                                        <button id="nd-iperf3-copy" class="pf-v6-c-button pf-m-secondary pf-m-small" type="button" translate="yes">Copy Output</button>
+                                    </div>
+                                </div>
+                                <div class="pf-v6-c-code-block__content nd-output__scroll" id="nd-iperf3-scroll" tabindex="0" role="log" aria-label="iPerf3 Client Output">
+                                    <pre class="pf-v6-c-code-block__pre"><code class="pf-v6-c-code-block__code" id="nd-iperf3-out"></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pane-portcheck" class="app-pane" hidden>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Port Check</h2>
+                            </div>
+                            <p class="app-muted pf-v6-u-mb-md" translate="yes">Quickly test whether one TCP or UDP port on a host answers, from the SERVER, using nc. For many ports or a summary, use Port Scan in the sub-menu.</p>
+                            <form id="nd-portcheck-form" class="nd-form" novalidate>
+                                <fieldset id="nd-portcheck-fields" class="nd-fields"></fieldset>
+                                <div class="nd-cmdrow">
+                                    <label class="app-muted" for="nd-portcheck-cmd" translate="yes">Command</label>
+                                    <span class="pf-v6-c-form-control pf-m-readonly nd-cmdrow__field"><input type="text" id="nd-portcheck-cmd" class="app-mono" readonly spellcheck="false" /></span>
+                                    <button id="nd-portcheck-cmd-copy" class="pf-v6-c-button pf-m-secondary" type="button" translate="yes">Copy Command</button>
+                                </div>
+                                <div id="nd-portcheck-actions" class="nd-actions"></div>
+                            </form>
+                            <div id="nd-portcheck-alert"></div>
+                        </div>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Output</h2>
+                                <span id="nd-portcheck-status"></span>
+                            </div>
+                            <div class="pf-v6-c-code-block nd-output">
+                                <div class="pf-v6-c-code-block__header">
+                                    <div class="pf-v6-c-code-block__actions">
+                                        <button id="nd-portcheck-copy" class="pf-v6-c-button pf-m-secondary pf-m-small" type="button" translate="yes">Copy Output</button>
+                                    </div>
+                                </div>
+                                <div class="pf-v6-c-code-block__content nd-output__scroll" id="nd-portcheck-scroll" tabindex="0" role="log" aria-label="Port Check Output">
+                                    <pre class="pf-v6-c-code-block__pre"><code class="pf-v6-c-code-block__code" id="nd-portcheck-out"></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pane-portscan" class="app-pane" hidden>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Port Scan</h2>
+                            </div>
+                            <p class="app-muted pf-v6-u-mb-md" translate="yes">Scan a host or network from the SERVER with nmap and get a summary of what it found. Only scan systems you are allowed to test. SYN scans, UDP scans and OS detection need administrative access.</p>
+                            <form id="nd-portscan-form" class="nd-form" novalidate>
+                                <fieldset id="nd-portscan-fields" class="nd-fields"></fieldset>
+                                <div class="nd-cmdrow">
+                                    <label class="app-muted" for="nd-portscan-cmd" translate="yes">Command</label>
+                                    <span class="pf-v6-c-form-control pf-m-readonly nd-cmdrow__field"><input type="text" id="nd-portscan-cmd" class="app-mono" readonly spellcheck="false" /></span>
+                                    <button id="nd-portscan-cmd-copy" class="pf-v6-c-button pf-m-secondary" type="button" translate="yes">Copy Command</button>
+                                </div>
+                                <div id="nd-portscan-actions" class="nd-actions"></div>
+                            </form>
+                            <div id="nd-portscan-alert"></div>
+                        </div>
+                        <div id="nd-portscan-summary" class="app-block" hidden>
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Summary</h2>
+                                <button id="nd-portscan-copysummary" class="pf-v6-c-button pf-m-secondary pf-m-small" type="button" translate="yes">Copy Summary</button>
+                            </div>
+                            <div id="nd-portscan-stats" class="nd-stats"></div>
+                            <div id="nd-portscan-table"></div>
+                        </div>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Output</h2>
+                                <span id="nd-portscan-status"></span>
+                            </div>
+                            <div class="pf-v6-c-code-block nd-output">
+                                <div class="pf-v6-c-code-block__header">
+                                    <div class="pf-v6-c-code-block__actions">
+                                        <button id="nd-portscan-copy" class="pf-v6-c-button pf-m-secondary pf-m-small" type="button" translate="yes">Copy Output</button>
+                                    </div>
+                                </div>
+                                <div class="pf-v6-c-code-block__content nd-output__scroll" id="nd-portscan-scroll" tabindex="0" role="log" aria-label="Port Scan Output">
+                                    <pre class="pf-v6-c-code-block__pre"><code class="pf-v6-c-code-block__code" id="nd-portscan-out"></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pane-dns" class="app-pane" hidden>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">DNS Lookup</h2>
+                            </div>
+                            <p class="app-muted pf-v6-u-mb-md" translate="yes">Query a name with dig from the SERVER. By default it uses the SERVER's own resolver; enter a DNS Server to ask a specific one instead.</p>
+                            <form id="nd-dns-form" class="nd-form" novalidate>
+                                <fieldset id="nd-dns-fields" class="nd-fields"></fieldset>
+                                <div class="nd-cmdrow">
+                                    <label class="app-muted" for="nd-dns-cmd" translate="yes">Command</label>
+                                    <span class="pf-v6-c-form-control pf-m-readonly nd-cmdrow__field"><input type="text" id="nd-dns-cmd" class="app-mono" readonly spellcheck="false" /></span>
+                                    <button id="nd-dns-cmd-copy" class="pf-v6-c-button pf-m-secondary" type="button" translate="yes">Copy Command</button>
+                                </div>
+                                <div id="nd-dns-actions" class="nd-actions"></div>
+                            </form>
+                            <div id="nd-dns-alert"></div>
+                        </div>
+                        <div class="app-block">
+                            <div class="app-block__header">
+                                <h2 class="app-block__title" translate="yes">Output</h2>
+                                <span id="nd-dns-status"></span>
+                            </div>
+                            <div class="pf-v6-c-code-block nd-output">
+                                <div class="pf-v6-c-code-block__header">
+                                    <div class="pf-v6-c-code-block__actions">
+                                        <button id="nd-dns-copy" class="pf-v6-c-button pf-m-secondary pf-m-small" type="button" translate="yes">Copy Output</button>
+                                    </div>
+                                </div>
+                                <div class="pf-v6-c-code-block__content nd-output__scroll" id="nd-dns-scroll" tabindex="0" role="log" aria-label="DNS Lookup Output">
+                                    <pre class="pf-v6-c-code-block__pre"><code class="pf-v6-c-code-block__code" id="nd-dns-out"></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                            </div>
+                            <hr class="pf-v6-c-divider" />
+                            <div class="pf-v6-c-card__footer app-footer">
+                                <span class="app-muted" translate="yes">Commands run on the SERVER, as your Cockpit user.</span>
+                                <span class="app-muted">NetDebug v1.0.0</span>
+                            </div>
+                        </div>
+                    </section>
+
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <datalist id="nd-hosts"></datalist>
+
+    <!-- Served by cockpit-ws itself (base1 package), not shipped in this package. -->
+    <script src="../base1/cockpit.js"></script>
+    <script src="functions.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

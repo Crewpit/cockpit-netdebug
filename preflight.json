@@ -1,0 +1,53 @@
+{
+  "cmSchema": 1,
+  "version": "1.0.0",
+  "issues": "https://github.com/Crewpit/cockpit-netdebug/issues",
+  "cockpitMin": 175,
+  "dependencies": [
+    {
+      "name": "ping",
+      "package": {
+        "apt-get": "iputils-ping",
+        "dnf": "iputils",
+        "yum": "iputils",
+        "zypper": "iputils",
+        "apk": "iputils",
+        "pacman": "iputils"
+      }
+    },
+    {
+      "name": "traceroute",
+      "package": "traceroute"
+    },
+    {
+      "name": "iperf3",
+      "package": "iperf3"
+    },
+    {
+      "name": "dig",
+      "package": {
+        "apt-get": "bind9-dnsutils",
+        "dnf": "bind-utils",
+        "yum": "bind-utils",
+        "zypper": "bind-utils",
+        "apk": "bind-tools",
+        "pacman": "bind"
+      }
+    },
+    {
+      "name": "nc",
+      "package": {
+        "apt-get": "netcat-openbsd",
+        "dnf": "nmap-ncat",
+        "yum": "nmap-ncat",
+        "zypper": "netcat-openbsd",
+        "apk": "netcat-openbsd",
+        "pacman": "openbsd-netcat"
+      }
+    },
+    {
+      "name": "nmap",
+      "package": "nmap"
+    }
+  ]
+}
