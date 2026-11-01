@@ -92,14 +92,7 @@ Reload Cockpit in the browser and **NetDebug** shows up in the sidebar under Too
 
 To update, pull the latest changes and copy them over again.
 
-## Issues
-
-Bug reports and ideas are welcome at [github.com/Crewpit/cockpit-netdebug/issues](https://github.com/Crewpit/cockpit-netdebug/issues).
 
 ## Safety
 
 Commands are started from an argument list, never through a shell. The host must look like a host name or IP address and can't start with `-`, so it can't be taken for an option.
-
-## License
-
-Apache License 2.0, see [LICENSE](LICENSE) and [NOTICE](NOTICE). PatternFly and the bundled fonts keep their own licenses (listed in NOTICE).
